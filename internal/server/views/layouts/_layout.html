@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{block "title" .}}Dashi{{end}}</title>
+    <link rel="shortcut icon" href="{{asset "icon.svg"}}">
+    {{stylesheet "main.css"}}
+    {{script "main.js"}}
+    {{if .View}}
+        {{printf "%s.css" .View | stylesheetIfExists}}
+        {{printf "%s.js" .View | scriptIfExists}}
+    {{end}}
+</head>
+<body class="{{if .View}}{{.View}}{{end}}">
+    {{template "_header.html" .}}
+    <main class="main">
+        <div class="content">
+            {{block "content" .}}{{end}}  
+        </div>
+    </main>
+</body>
+</html>
+{{/* vim: set ft=gotmpl: */}}

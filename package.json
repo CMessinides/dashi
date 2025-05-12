@@ -1,0 +1,11 @@
+{
+  "name": "@dashi/dashi",
+  "private": "true",
+  "version": "1.0.0",
+  "author": "Cameron Messinides <cameron.messinides@gmail.com>",
+  "license": "MIT",
+  "description": "A home dashboard",
+  "devDependencies": {
+    "esbuild": "^0.25.4"
+  }
+}
