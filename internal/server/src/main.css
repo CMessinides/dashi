@@ -1,4 +1,12 @@
-:root {
-  --dashi-bg: white;
-  --dashi-fg: red;
-}
+@import "./styles/base/layers.css";
+@import "./styles/base/reset.css";
+@import "./styles/base/theme.css";
+@import "./styles/base/elements.css";
+@import "./styles/base/layout.css";
+
+@import "./styles/components/header.css";
+@import "./styles/components/well.css";
+
+@import "./styles/utilities/gutters.css";
+@import "./styles/utilities/padding.css";
+@import "./styles/utilities/margin.css";

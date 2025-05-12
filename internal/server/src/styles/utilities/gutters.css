@@ -1,0 +1,9 @@
+@layer utilities {
+  .gutters {
+    padding-inline: var(--gutter);
+  }
+
+  .gutters-2x {
+    padding-inline: var(--gutter-2x);
+  }
+}

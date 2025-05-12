@@ -1,0 +1,17 @@
+@layer base {
+  .layout {
+    min-height: 100dvh;
+    display: grid;
+    grid-template-rows: [header-start] auto [header-end main-start] 1fr [main-end];
+    grid-template-columns: [header-start main-start] 1fr [main-end header-end];
+    grid-auto-flow: column dense;
+  }
+
+  .layout-header {
+    grid-area: header;
+  }
+
+  .layout-main {
+    grid-area: main;
+  }
+}

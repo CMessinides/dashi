@@ -1,0 +1,7 @@
+@layer components {
+  .well {
+    background-color: var(--color-accent-light);
+    border-radius: var(--radius);
+    border: 1px var(--color-accent) solid;
+  }
+}

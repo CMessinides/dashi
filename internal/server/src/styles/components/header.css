@@ -1,0 +1,15 @@
+@layer components {
+  .header {
+    a {
+      color: inherit;
+
+      &:not(:hover) {
+        text-decoration: none;
+      }
+    }
+
+    .home {
+      font-weight: var(--font-weight-semibold);
+    }
+  }
+}

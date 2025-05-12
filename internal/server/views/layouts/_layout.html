@@ -12,12 +12,12 @@
         {{printf "%s.js" .View | scriptIfExists}}
     {{end}}
 </head>
-<body class="{{if .View}}{{.View}}{{end}}">
-    {{template "_header.html" .}}
-    <main class="main">
-        <div class="content">
-            {{block "content" .}}{{end}}  
-        </div>
+<body class="layout {{if .View}}{{.View}}{{end}}">
+    <div class="layout-header">
+        {{template "_header.html" .}}
+    </div>
+    <main class="layout-main content">
+        {{block "content" .}}{{end}}  
     </main>
 </body>
 </html>

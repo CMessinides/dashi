@@ -28,7 +28,9 @@ func NewServer(conf Config) *Server {
 	u.ConfigureServer(e)
 
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello from dashi")
+		return c.Render(http.StatusOK, "dashboard.html", map[string]string{
+			"View": "dashboard",
+		})
 	})
 
 	return &Server{
