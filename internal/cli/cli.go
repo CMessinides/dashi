@@ -3,6 +3,8 @@ package cli
 import (
 	"errors"
 	"flag"
+	"fmt"
+	"net/http"
 	"os"
 
 	"github.com/cmessinides/dashi/internal/server"
@@ -20,6 +22,7 @@ func Run(conf Config) int {
 		if errors.Is(err, flag.ErrHelp) {
 			return 0
 		} else {
+			fmt.Println(err)
 			return 2
 		}
 	}
@@ -28,7 +31,10 @@ func Run(conf Config) int {
 		Dev: conf.Dev,
 	})
 
-	if err := s.Run(*addr); err != nil {
+	fmt.Printf("Dashi is listening on %s\n", *addr)
+	err := http.ListenAndServe(*addr, s)
+	if err != nil {
+		fmt.Println(err)
 		return 1
 	}
 

@@ -1,10 +1,9 @@
 package server
 
 import (
-	"fmt"
+	"bytes"
+	"io"
 	"net/http"
-
-	"github.com/labstack/echo/v4"
 )
 
 type Config struct {
@@ -12,33 +11,54 @@ type Config struct {
 }
 
 type Server struct {
-	e *echo.Echo
+	Assets   *AssetHandler
+	Renderer Renderer
+	mux      *http.ServeMux
 }
 
 func NewServer(conf Config) *Server {
-	e := echo.New()
-	e.HideBanner = true
-	e.HidePort = true
-	e.Debug = conf.Dev
+	s := &Server{
+		mux: http.NewServeMux(),
+		Assets: defaultAssetHandler(AssetConfig{
+			PublicPath: "/assets",
+			Dev:        conf.Dev,
+		}),
+	}
 
-	u := newUI(uiConfig{
-		Dev:       conf.Dev,
-		AssetPath: "/assets",
-	})
-	u.ConfigureServer(e)
-
-	e.GET("/", func(c echo.Context) error {
-		return c.Render(http.StatusOK, "dashboard.html", map[string]string{
-			"View": "dashboard",
-		})
+	s.Renderer = defaultRenderer(RendererConfig{
+		Dev:   conf.Dev,
+		Funcs: s.Assets.TemplateFuncs(),
 	})
 
-	return &Server{
-		e: e,
+	s.mux.HandleFunc("GET /", s.dashboard)
+
+	s.mux.Handle("GET "+s.Assets.PublicPath+"/", http.FileServerFS(s.Assets.FS))
+
+	return s
+}
+
+func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	s.mux.ServeHTTP(w, req)
+}
+
+func (s *Server) dashboard(w http.ResponseWriter, r *http.Request) {
+	buf := new(bytes.Buffer)
+	v := NewView("dashboard", map[string]any{
+		"View": "dashboard",
+	})
+
+	err := s.render(buf, v)
+
+	if err != nil {
+		w.WriteHeader(500)
+		w.Write([]byte(err.Error()))
+	} else {
+		w.Header().Add("Content-Type", "text/html;utf8")
+		w.WriteHeader(200)
+		w.Write(buf.Bytes())
 	}
 }
 
-func (s *Server) Run(addr string) error {
-	fmt.Printf("Dashi started on %s\n", addr)
-	return s.e.Start(addr)
+func (s *Server) render(w io.Writer, view *View) error {
+	return s.Renderer.Render(w, view)
 }
